@@ -14,13 +14,8 @@ class Product extends Model
 
     protected $casts = [
         'price' => 'decimal:2',
-        'weight' => 'decimal:2',
         'features' => 'array',
-        'specifications' => 'array',
         'stock_quantity' => 'integer',
-        'in_stock' => 'boolean',
-        'is_active' => 'boolean',
-        'is_featured' => 'boolean',
     ];
 
     /**
@@ -52,23 +47,7 @@ class Product extends Model
      */
     public function getIsInStockAttribute(): bool
     {
-        return $this->in_stock && $this->stock_quantity > 0;
-    }
-
-    /**
-     * Scope for active products
-     */
-    public function scopeActive($query)
-    {
-        return $query->where('is_active', true);
-    }
-
-    /**
-     * Scope for featured products
-     */
-    public function scopeFeatured($query)
-    {
-        return $query->where('is_featured', true);
+        return $this->stock_quantity > 0;
     }
 
     /**
