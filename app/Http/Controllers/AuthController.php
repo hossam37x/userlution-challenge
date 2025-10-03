@@ -4,16 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
-use App\Models\User;
+use App\Services\AuthService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class AuthController extends Controller
 {
+    protected AuthService $authService;
+
+    public function __construct(AuthService $authService)
+    {
+        $this->authService = $authService;
+    }
+
     /**
      * Show the registration form.
+     * @return View
      */
     public function showRegisterForm(): View
     {
@@ -22,21 +29,14 @@ class AuthController extends Controller
 
     /**
      * Handle registration request.
+     *
+     * @param RegisterRequest $request
+     * @return RedirectResponse
      */
     public function register(RegisterRequest $request): RedirectResponse
     {
-        // Create the user
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'age' => $request->age,
-        ]);
+        $user = $this->authService->register($request->validated());
 
-        // Log the user in
-        Auth::login($user);
-
-        // Redirect to products page with success message
         return redirect()->route('products.index')
             ->with('success', 'Your account has been created successfully! Welcome to our store.');
     }
@@ -51,33 +51,42 @@ class AuthController extends Controller
 
     /**
      * Handle login request.
+     *
+     * @param LoginRequest $request
+     * @return RedirectResponse
      */
     public function login(LoginRequest $request): RedirectResponse
     {
-        $credentials = $request->only('email', 'password');
-        $remember = $request->boolean('remember');
+        $validated = $request->validated();
+        $credentials = [
+            'email' => $request->email,
+            'password' => $request->password
+        ];
+        $remember = $request->remember ?? false;
 
-        if (Auth::attempt($credentials, $remember)) {
-            $request->session()->regenerate();
+        // Use the auth service to attempt login
+        if ($this->authService->login($credentials, $remember, $request)) {
+            $user = $this->authService->getAuthenticatedUser();
 
             return redirect()->intended(route('products.index'))
-                ->with('success', 'Welcome back, ' . Auth::user()->name . '!');
+                ->with('success', 'Welcome back, ' . $user->name . '!');
         }
 
         return back()
             ->withErrors(['email' => 'The provided credentials do not match our records.'])
-            ->withInput($request->only('email'));
+            ->withInput(['email' => $validated['email']]);
     }
 
     /**
      * Handle logout request.
+     *
+     * @param Request $request
+     * @return RedirectResponse
      */
-    public function logout(): RedirectResponse
+    public function logout(Request $request): RedirectResponse
     {
-        Auth::logout();
-
-        request()->session()->invalidate();
-        request()->session()->regenerateToken();
+        // Use the auth service to logout
+        $this->authService->logout($request);
 
         return redirect()->route('login')
             ->with('success', 'You have been logged out successfully.');

@@ -5,6 +5,13 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
 
+/**
+ * @property string $name
+ * @property string $email
+ * @property string $password
+ * @property int $age
+ * @property bool $terms
+ */
 class RegisterRequest extends FormRequest
 {
     /**
