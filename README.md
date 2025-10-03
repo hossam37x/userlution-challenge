@@ -1,61 +1,261 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel Project - Docker Setup
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Laravel 12 application with Docker containerization for easy development and deployment.
 
-## About Laravel
+## 🚀 Quick Start
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Prerequisites
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- [Docker](https://docs.docker.com/get-docker/) (version 20.10+)
+- [Docker Compose](https://docs.docker.com/compose/install/) (version 2.0+)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Getting Started
 
-## Learning Laravel
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd userlution-task
+   ```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+2. **Start the application**
+   ```bash
+   docker-compose up -d
+   ```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+3. **Access the application**
+   - **Laravel App**: http://localhost:8000
+   - **phpMyAdmin**: http://localhost:8080
+   - **MySQL**: localhost:3306
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+That's it! The application should be running with all dependencies.
 
-## Laravel Sponsors
+## 🏗️ Architecture
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+The project uses a multi-container Docker setup with clean separation of concerns:
 
-### Premium Partners
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Nginx         │    │   Laravel App   │    │   MySQL 8.0     │
+│   (Web Server)  │◄───┤   (PHP-FPM)     │◄───┤   (Database)    │
+│   Port: 8000    │    │   Port: 9000    │    │   Port: 3306    │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+                                ▲
+                                │
+                       ┌─────────────────┐
+                       │   phpMyAdmin    │
+                       │   (DB Admin)    │
+                       │   Port: 8080    │
+                       └─────────────────┘
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### Services
 
-## Contributing
+- **nginx**: Web server handling HTTP requests and static files
+- **app**: Laravel application running on PHP 8.2 FPM
+- **mysql**: MySQL 8.0 database with persistent storage
+- **phpmyadmin**: Web-based MySQL administration tool
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 🔧 Development Workflow
 
-## Code of Conduct
+### Managing Containers
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+# Start all services
+docker-compose up -d
 
-## Security Vulnerabilities
+# View logs
+docker-compose logs -f
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# Stop all services
+docker-compose down
 
-## License
+# Rebuild containers (after code changes)
+docker-compose up -d --build
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Laravel Commands
+
+```bash
+# Access the Laravel container
+docker-compose exec app sh
+
+# Run Artisan commands
+docker-compose exec app php artisan migrate
+docker-compose exec app php artisan db:seed
+docker-compose exec app php artisan tinker
+
+# Install Composer packages
+docker-compose exec app composer install
+
+# Clear caches
+docker-compose exec app php artisan cache:clear
+docker-compose exec app php artisan config:clear
+docker-compose exec app php artisan route:clear
+```
+
+### Database Management
+
+**Using phpMyAdmin** (Recommended)
+- URL: http://localhost:8080
+- Server: `mysql`
+- Username: `laravel`
+- Password: `secret`
+
+**Using Command Line**
+```bash
+# Access MySQL directly
+docker-compose exec mysql mysql -u laravel -p laravel
+
+# Run migrations
+docker-compose exec app php artisan migrate
+
+# Seed database
+docker-compose exec app php artisan db:seed
+
+# Reset database
+docker-compose exec app php artisan migrate:fresh --seed
+```
+
+### Asset Building
+
+```bash
+# Install NPM dependencies (if needed)
+docker-compose exec app npm install
+
+# Build assets for development
+docker-compose exec app npm run dev
+
+# Build assets for production
+docker-compose exec app npm run build
+
+# Watch for changes (development)
+docker-compose exec app npm run dev -- --watch
+```
+
+## 📁 Project Structure
+
+```
+.
+├── Dockerfile              # Laravel app container definition
+├── docker-compose.yml      # Multi-container orchestration
+├── nginx.conf              # Nginx configuration
+├── .dockerignore           # Files to exclude from Docker context
+├── app/                    # Laravel application code
+├── public/                 # Public web assets
+├── resources/              # Views, CSS, JS source files
+├── database/               # Migrations, seeders, factories
+└── ...
+```
+
+## 🛠️ Configuration
+
+### Environment Variables
+
+The application uses the following environment configuration:
+
+```env
+APP_NAME=Laravel
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://localhost:8000
+
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=laravel
+DB_USERNAME=laravel
+DB_PASSWORD=secret
+
+CACHE_DRIVER=file
+SESSION_DRIVER=file
+QUEUE_CONNECTION=database
+```
+
+### Custom Configuration
+
+To modify the setup:
+
+1. **Change ports**: Edit `docker-compose.yml` ports section
+2. **Database credentials**: Update `docker-compose.yml` environment variables
+3. **Nginx settings**: Modify `nginx.conf`
+4. **PHP settings**: Edit `Dockerfile` or add custom PHP configuration
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**Container won't start**
+```bash
+# Check container status
+docker-compose ps
+
+# View detailed logs
+docker-compose logs app
+docker-compose logs nginx
+docker-compose logs mysql
+```
+
+**Database connection issues**
+```bash
+# Ensure MySQL is ready
+docker-compose exec mysql mysql -u laravel -p
+
+# Check Laravel database config
+docker-compose exec app php artisan config:show database
+```
+
+**Permission issues**
+```bash
+# Fix storage permissions
+docker-compose exec app chmod -R 755 storage bootstrap/cache
+docker-compose exec app chown -R www-data:www-data storage bootstrap/cache
+```
+
+**Clear everything and restart**
+```bash
+# Stop and remove containers, networks, volumes
+docker-compose down -v
+
+# Rebuild from scratch
+docker-compose up -d --build
+```
+
+### Performance Tips
+
+- Use `.dockerignore` to exclude unnecessary files
+- Mount only necessary directories in development
+- Use Docker BuildKit for faster builds
+- Consider using `--parallel` flag for faster startup
+
+## 🚀 Production Deployment
+
+For production deployment:
+
+1. Update environment variables in `docker-compose.yml`
+2. Set `APP_ENV=production` and `APP_DEBUG=false`
+3. Use proper SSL certificates
+4. Configure proper database credentials
+5. Set up proper logging and monitoring
+
+```bash
+# Production build
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+```
+
+## 📚 Additional Resources
+
+- [Laravel Documentation](https://laravel.com/docs)
+- [Docker Documentation](https://docs.docker.com/)
+- [Docker Compose Documentation](https://docs.docker.com/compose/)
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test with Docker
+5. Submit a pull request
+
+## 📄 License
+
+This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
