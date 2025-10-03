@@ -22,7 +22,7 @@ class UserSeeder extends Seeder
 
         User::factory()->create([
             'name' => 'Test User',
-            'email' => 'test@example.com',
+            'email' => 'test2@example.com',
             'age' => 12,
         ]);
 
