@@ -68,7 +68,6 @@ class ProductSeeder extends Seeder
             Product::factory()
                 ->forCategory($home)
                 ->home()
-                ->ageRestricted()
                 ->withRealImages()
                 ->create([
                     'name' => 'Premium Wine Collection',
@@ -111,7 +110,6 @@ class ProductSeeder extends Seeder
             Product::factory()
                 ->count(5)
                 ->forCategory($adultProducts)
-                ->ageRestricted()
                 ->withRealImages()
                 ->inStock()
                 ->create();

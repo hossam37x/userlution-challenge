@@ -117,13 +117,6 @@ class ProductFactory extends Factory
         ]);
     }
 
-    public function ageRestricted(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'min_age' => 21,
-        ]);
-    }
-
     public function withRealImages(): static
     {
         return $this->state(fn (array $attributes) => []);
