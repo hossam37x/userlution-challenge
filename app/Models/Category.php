@@ -11,7 +11,7 @@ class Category extends Model
 {
     use HasFactory;
 
-    protected $guarder = ['id','created_at', 'updated_at'];
+    protected $guarded = ['id','created_at', 'updated_at'];
 
     protected $casts = [
         'is_active' => 'boolean',
