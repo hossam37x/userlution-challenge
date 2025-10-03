@@ -13,8 +13,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Run seeders in order (categories first, then products)
+        $this->call([
+            CategorySeeder::class,
+            ProductSeeder::class,
+        ]);
 
+        // Create a test user
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
