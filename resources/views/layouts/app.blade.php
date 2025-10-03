@@ -17,113 +17,50 @@
     <link href="/css/app.css" rel="stylesheet">
 
     <style>
-        :root {
-            --bs-primary: #f53003;
-            --bs-primary-rgb: 245, 48, 3;
-        }
-
-        .btn-primary {
-            --bs-btn-bg: var(--bs-primary);
-            --bs-btn-border-color: var(--bs-primary);
-            --bs-btn-hover-bg: #d42a02;
-            --bs-btn-hover-border-color: #d42a02;
-            --bs-btn-active-bg: #c1240.2;
-            --bs-btn-active-border-color: #c12402;
-        }
-
-        .text-primary {
-            color: var(--bs-primary) !important;
-        }
-
-        .navbar-brand {
-            font-weight: 600;
-            font-size: 1.5rem;
-        }
-
-        .product-card {
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-        }
-
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        }
-
-        .age-restriction-badge {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            color: white;
-            font-weight: 600;
-            border-radius: 20px;
-        }
-
         .filter-sidebar {
             background-color: #f8f9fa;
-            border-radius: 10px;
-            padding: 1.5rem;
-        }
-
-        .sort-dropdown {
-            min-width: 200px;
-        }
-
-        .price-badge {
-            background: linear-gradient(45deg, #2ecc71, #27ae60);
-            color: white;
-            font-weight: 600;
+            padding: 1rem;
+            border: 1px solid #dee2e6;
         }
 
         .category-tag {
             background-color: #e9ecef;
             color: #495057;
-            padding: 0.25rem 0.75rem;
-            border-radius: 15px;
+            padding: 0.25rem 0.5rem;
             font-size: 0.875rem;
-            font-weight: 500;
+        }
+
+        .age-restriction-badge {
+            background-color: #dc3545;
+            color: white;
         }
 
         .out-of-stock {
             opacity: 0.6;
-            position: relative;
-        }
-
-        .out-of-stock::after {
-            content: 'Out of Stock';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(220, 53, 69, 0.9);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            font-weight: 600;
-            z-index: 10;
         }
     </style>
 
 </head>
 <body class="bg-light">
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand text-primary" href="/products">
-                <i class="bi bi-shop me-2"></i>Products Store
+            <a class="navbar-brand" href="/products">
+                Products Store
             </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="/products">
-                            <i class="bi bi-grid me-1"></i>All Products
-                        </a>
+                        <a class="nav-link active" href="/products">All Products</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-tags me-1"></i>Categories
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            Categories
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="/products?category=electronics">Electronics</a></li>
@@ -131,71 +68,61 @@
                             <li><a class="dropdown-item" href="/products?category=books">Books</a></li>
                             <li><a class="dropdown-item" href="/products?category=home">Home & Garden</a></li>
                             <li><a class="dropdown-item" href="/products?category=sports">Sports</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="/products">View All</a></li>
                         </ul>
                     </li>
                 </ul>
 
                 <!-- Search Form -->
                 <form class="d-flex me-3" method="GET" action="/products">
-                    <div class="input-group">
-                        <input class="form-control" type="search" name="search" placeholder="Search products..." aria-label="Search" value="">
-                        <button class="btn btn-outline-light" type="submit">
-                            <i class="bi bi-search"></i>
-                        </button>
-                    </div>
+                    <input class="form-control me-2" type="search" name="search" placeholder="Search products...">
+                    <button class="btn btn-outline-light" type="submit">Search</button>
                 </form>
 
-                <!-- Age Verification Status -->
-                <div class="navbar-nav">
-                    <div class="nav-item">
-                        <span class="nav-link">
-                            <!-- Show verify age button (not verified state) -->
-                            <button class="btn btn-outline-warning btn-sm" data-bs-toggle="modal" data-bs-target="#ageVerificationModal">
-                                <i class="bi bi-shield-exclamation me-1"></i>Verify Age
-                            </button>
-                        </span>
-                    </div>
-                </div>
+                <!-- Authentication Links -->
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('login') }}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('register') }}">Register</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
 
+    <!-- Success Messages -->
+    @if(session('success'))
+        <div class="container mt-3">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        </div>
+    @endif
+
     <!-- Main Content -->
     <main class="py-4">
-        <!-- Content will be inserted here -->
+        @yield('content')
     </main>
 
     <!-- Age Verification Modal -->
-    <div class="modal fade" id="ageVerificationModal" tabindex="-1" aria-labelledby="ageVerificationModalLabel" aria-hidden="true">
+    <div class="modal fade" id="ageVerificationModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header bg-warning text-dark">
-                    <h1 class="modal-title fs-5" id="ageVerificationModalLabel">
-                        <i class="bi bi-shield-exclamation me-2"></i>Age Verification Required
-                    </h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-header">
+                    <h5 class="modal-title">Age Verification Required</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="text-center">
-                        <i class="bi bi-calendar-check text-primary fs-1 mb-3"></i>
-                        <h4>Are you 18 years or older?</h4>
-                        <p class="text-muted">Some products are restricted to users between 18-30 years of age. Please verify your age to access all products.</p>
-
-                        <form method="POST" action="/age-verify" class="mt-4">
-                            <div class="row g-2 justify-content-center">
-                                <div class="col-auto">
-                                    <input type="number" class="form-control" name="age" placeholder="Enter your age" min="1" max="120" required>
-                                </div>
-                                <div class="col-auto">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="bi bi-check-lg me-1"></i>Verify Age
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+                    <p>Some products are restricted to users between 18-30 years of age. Please verify your age to access all products.</p>
+                    <form method="POST" action="/age-verify">
+                        <div class="mb-3">
+                            <label for="age" class="form-label">Enter your age:</label>
+                            <input type="number" class="form-control" name="age" placeholder="Your age" min="1" max="120" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Verify Age</button>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -209,12 +136,11 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <h5 class="text-primary">Products Store</h5>
-                    <p class="mb-0">Your one-stop shop for quality products with age-appropriate content filtering.</p>
+                    <h5>Products Store</h5>
+                    <p class="mb-0">Your one-stop shop for quality products.</p>
                 </div>
                 <div class="col-md-6 text-md-end">
                     <p class="mb-0">&copy; 2025 Products Store. All rights reserved.</p>
-                    <small class="text-muted">Built with Laravel & Bootstrap</small>
                 </div>
             </div>
         </div>
