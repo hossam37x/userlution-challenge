@@ -5,9 +5,6 @@
 
     <div class="card-body d-flex flex-column">
         <h5 class="card-title">{{ $product->name }}</h5>
-        <!-- Age restriction badge for demo -->
-        <span class="badge age-restriction-badge mb-2">18+ Only</span>
-
         <!-- Category tag -->
         <span class="category-tag mb-2">{{ $product->category->name }}</span>
 

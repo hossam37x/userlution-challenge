@@ -39,28 +39,11 @@
         </div>
     @endif
 
-    <!-- Age Restriction Notice -->
-    @if(!session('age_verified'))
-        <div class="alert alert-warning">
-            <strong>Age Verification Required</strong> - Some products are restricted to users between 18-30 years of age.
-            <button class="btn btn-warning btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#ageVerificationModal">
-                Verify Age Now
-            </button>
-        </div>
-    @endif
-
     <div class="row">
         <!-- Sidebar Filters (Desktop) -->
         <div class="col-lg-3 mb-4">
             <div class="d-lg-block d-none">
                 <x-filter-sidebar
-                    :sortOptions="[
-                        'name_asc' => 'Name A-Z',
-                        'name_desc' => 'Name Z-A',
-                        'price_asc' => 'Price Low-High',
-                        'price_desc' => 'Price High-Low',
-                        'newest' => 'Newest First'
-                    ]"
                     :activeSort="request('sort', '')"
                 />
             </div>
@@ -72,12 +55,6 @@
                 </button>
                 <div class="collapse mt-3" id="mobileFilters">
                     <x-filter-sidebar
-                        :sortOptions="[
-                            'name_asc' => 'Name A-Z',
-                            'name_desc' => 'Name Z-A',
-                            'price_asc' => 'Price Low-High',
-                            'price_desc' => 'Price High-Low'
-                        ]"
                         :activeSort="request('sort', '')"
                     />
                 </div>
