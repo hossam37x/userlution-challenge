@@ -36,9 +36,6 @@ class Product extends Model
      */
     public function isAvailableForAge(?int $age): bool
     {
-        if ($age === null) {
-            return false;
-        }
         if (!$this->category->is_age_restricted) {
             return true;
         }
