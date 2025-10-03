@@ -23,8 +23,6 @@ class ProductFactory extends Factory
             'category_id' => null, // Will be set by seeder or forCategory()
             'features' => $this->faker->words(5),
             'stock_quantity' => $this->faker->numberBetween(0, 100),
-            'in_stock' => $this->faker->boolean(80),
-            'min_age' => $this->faker->randomElement([0, 3, 6, 12, 16, 18, 21]),
         ];
     }
 
@@ -53,7 +51,6 @@ class ProductFactory extends Factory
                 'Fast Charging',
                 'Latest Technology',
             ],
-            'min_age' => 0,
         ]);
     }
 
@@ -70,7 +67,6 @@ class ProductFactory extends Factory
                 'Durable Construction',
                 'Style Versatile',
             ],
-            'min_age' => 0,
         ]);
     }
 
@@ -86,7 +82,6 @@ class ProductFactory extends Factory
                 'Updated Edition',
                 'Practice Exercises',
             ],
-            'min_age' => $this->faker->randomElement([0, 12, 16]),
         ]);
     }
 
@@ -103,7 +98,6 @@ class ProductFactory extends Factory
                 'Durable Design',
                 'Warranty Included',
             ],
-            'min_age' => 0,
         ]);
     }
 
@@ -120,7 +114,6 @@ class ProductFactory extends Factory
                 'Non-slip Surface',
                 'Portable',
             ],
-            'min_age' => $this->faker->randomElement([0, 12]),
         ]);
     }
 
@@ -140,7 +133,6 @@ class ProductFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'stock_quantity' => 0,
-            'in_stock' => false,
         ]);
     }
 
@@ -148,7 +140,6 @@ class ProductFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'stock_quantity' => $this->faker->numberBetween(20, 100),
-            'in_stock' => true,
         ]);
     }
 }

@@ -20,8 +20,6 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->json('features')->nullable();
             $table->integer('stock_quantity')->default(0);
-            $table->boolean('in_stock')->default(true);
-            $table->integer('min_age')->default(0);
             $table->timestamps();
         });
     }

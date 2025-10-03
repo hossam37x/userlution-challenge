@@ -19,6 +19,7 @@ class ProductSeeder extends Seeder
         $books = Category::where('slug', 'books')->first();
         $home = Category::where('slug', 'home')->first();
         $sports = Category::where('slug', 'sports')->first();
+        $adultProducts = Category::where('slug', 'adult-personal-products')->first();
 
         // Create Electronics products
         if ($electronics) {
@@ -102,6 +103,17 @@ class ProductSeeder extends Seeder
                 ->electronics()
                 ->withRealImages()
                 ->outOfStock()
+                ->create();
+        }
+
+        if ($adultProducts) {
+            // Create Adult Personal Products
+            Product::factory()
+                ->count(5)
+                ->forCategory($adultProducts)
+                ->ageRestricted()
+                ->withRealImages()
+                ->inStock()
                 ->create();
         }
     }

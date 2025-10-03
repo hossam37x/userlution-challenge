@@ -50,6 +50,16 @@ class CategorySeeder extends Seeder
                 'is_active' => true,
                 'sort_order' => 5,
             ],
+            [
+                'name' => 'Adult Personal Products',
+                'slug' => 'adult-personal-products',
+                'description' => 'Products intended for adult personal use, including intimate items and wellness products.',
+                'is_active' => true,
+                'sort_order' => 6,
+                'min_age' => 18,
+                'max_age' => 30,
+                'is_age_restricted' => true,
+            ]
         ];
 
         foreach ($categories as $category) {

@@ -20,9 +20,6 @@ class Product extends Model
         'in_stock' => 'boolean',
         'is_active' => 'boolean',
         'is_featured' => 'boolean',
-        'age_restricted' => 'boolean',
-        'min_age' => 'integer',
-        'max_age' => 'integer',
     ];
 
     /**

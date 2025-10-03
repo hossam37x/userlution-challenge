@@ -10,14 +10,7 @@ class Category extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'slug',
-        'description',
-        'image',
-        'is_active',
-        'sort_order',
-    ];
+    protected $guarder = ['id','created_at', 'updated_at'];
 
     protected $casts = [
         'is_active' => 'boolean',
@@ -30,13 +23,5 @@ class Category extends Model
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);
-    }
-
-    /**
-     * Get only active products for this category
-     */
-    public function activeProducts(): HasMany
-    {
-        return $this->hasMany(Product::class)->where('is_active', true);
     }
 }

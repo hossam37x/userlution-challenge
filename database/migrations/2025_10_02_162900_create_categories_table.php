@@ -19,6 +19,9 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->boolean('is_active')->default(true);
             $table->integer('sort_order')->default(0);
+            $table->integer('min_age')->default(0);
+            $table->integer('max_age')->default(0);
+            $table->boolean('is_age_restricted')->default(false);
             $table->timestamps();
         });
     }
