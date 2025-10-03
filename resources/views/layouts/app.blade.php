@@ -42,54 +42,7 @@
 
 </head>
 <body class="bg-light">
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="/products">
-                Products Store
-            </a>
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/products">All Products</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            Categories
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/products?category=electronics">Electronics</a></li>
-                            <li><a class="dropdown-item" href="/products?category=clothing">Clothing</a></li>
-                            <li><a class="dropdown-item" href="/products?category=books">Books</a></li>
-                            <li><a class="dropdown-item" href="/products?category=home">Home & Garden</a></li>
-                            <li><a class="dropdown-item" href="/products?category=sports">Sports</a></li>
-                        </ul>
-                    </li>
-                </ul>
-
-                <!-- Search Form -->
-                <form class="d-flex me-3" method="GET" action="/products">
-                    <input class="form-control me-2" type="search" name="search" placeholder="Search products...">
-                    <button class="btn btn-outline-light" type="submit">Search</button>
-                </form>
-
-                <!-- Authentication Links -->
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('login') }}">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('register') }}">Register</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <x-nav-bar></x-nav-bar>
 
     <!-- Success Messages -->
     @if(session('success'))
