@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -15,6 +16,7 @@ class Category extends Model
     protected $casts = [
         'is_active' => 'boolean',
         'sort_order' => 'integer',
+        'is_age_restricted' => 'boolean',
     ];
 
     /**
@@ -23,5 +25,19 @@ class Category extends Model
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);
+    }
+
+    /**
+     * Scope a query to only include categories suitable for the given user's age.
+     *
+     * @param Builder $query
+     * @param User|null $user
+     * @return Builder
+     */
+    public function scopeAgeRestriction(Builder $query, ?User $user) {
+        return $query->when($user, function (Builder $query) use ($user) {
+
+            return $query->where('min_age', '<=', $user->age)->where('max_age', '>=', $user->age);
+        })->orWhere('is_age_restricted', false);
     }
 }

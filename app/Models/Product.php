@@ -35,18 +35,14 @@ class Product extends Model
      */
     public function isAvailableForAge(?int $age): bool
     {
-        if (!$this->age_restricted) {
-            return true;
-        }
-
         if ($age === null) {
             return false;
         }
+        if (!$this->category->is_age_restricted) {
+            return true;
+        }
 
-        $minAge = $this->min_age ?? 18;
-        $maxAge = $this->max_age ?? 30;
-
-        return $age >= $minAge && $age <= $maxAge;
+        return $age >= $this->category->min_age && $age <= $this->category->max_age;
     }
 
     public function images() {
@@ -80,21 +76,22 @@ class Product extends Model
     /**
      * Scope for products available for specific age
      */
-    public function scopeAvailableForAge($query, ?int $age)
+    public function scopeAgeRestriction($query, ?int $age)
     {
         if ($age === null) {
-            return $query->where('age_restricted', false);
+            return $query->whereHas('category', function ($q) {
+                $q->where('is_age_restricted', false);
+            });
         }
 
         return $query->where(function ($q) use ($age) {
-            $q->where('age_restricted', false)
-              ->orWhere(function ($subQ) use ($age) {
-                  $subQ->where('age_restricted', true)
-                       ->where(function ($ageQ) use ($age) {
-                           $ageQ->where('min_age', '<=', $age)
-                                ->where('max_age', '>=', $age);
-                       });
-              });
+            $q->whereHas('category', function ($q2) use ($age) {
+                $q2->where('is_age_restricted', false);
+            })->orWhereHas('category', function ($q2) use ($age) {
+                $q2->where('is_age_restricted', true)
+                    ->where('min_age', '<=', $age)
+                    ->where('max_age', '>=', $age);
+            });
         });
     }
 }
