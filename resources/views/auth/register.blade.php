@@ -11,48 +11,80 @@
                     <h4 class="mb-0">Create Account</h4>
                 </div>
                 <div class="card-body">
+                    @if($errors->any())
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
                     <form method="POST" action="{{ route('register.store') }}">
                         @csrf
 
                         <!-- Name -->
                         <div class="mb-3">
                             <label for="name" class="form-label">Full Name</label>
-                            <input type="text" class="form-control" id="name" name="name" required autofocus>
+                            <input type="text" class="form-control @error('name') is-invalid @enderror"
+                                   id="name" name="name" value="{{ old('name') }}" required autofocus>
+                            @error('name')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <!-- Email -->
                         <div class="mb-3">
                             <label for="email" class="form-label">Email Address</label>
-                            <input type="email" class="form-control" id="email" name="email" required>
+                            <input type="email" class="form-control @error('email') is-invalid @enderror"
+                                   id="email" name="email" value="{{ old('email') }}" required>
+                            @error('email')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <!-- Password -->
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" name="password" required minlength="8">
+                            <input type="password" class="form-control @error('password') is-invalid @enderror"
+                                   id="password" name="password" required minlength="8">
                             <small class="form-text text-muted">Password must be at least 8 characters long.</small>
+                            @error('password')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <!-- Confirm Password -->
                         <div class="mb-3">
                             <label for="password_confirmation" class="form-label">Confirm Password</label>
-                            <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
+                            <input type="password" class="form-control @error('password') is-invalid @enderror"
+                                   id="password_confirmation" name="password_confirmation" required>
                             <small id="passwordMatch" class="form-text"></small>
                         </div>
 
                         <!-- Age -->
                         <div class="mb-3">
                             <label for="age" class="form-label">Age</label>
-                            <input type="number" class="form-control" id="age" name="age" min="1" max="120" required>
+                            <input type="number" class="form-control @error('age') is-invalid @enderror"
+                                   id="age" name="age" value="{{ old('age') }}" min="12" max="120" required>
+                            @error('age')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <!-- Terms and Conditions -->
                         <div class="mb-3">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="terms" name="terms" required>
+                                <input class="form-check-input @error('terms') is-invalid @enderror"
+                                       type="checkbox" id="terms" name="terms"
+                                       {{ old('terms') ? 'checked' : '' }} required>
                                 <label class="form-check-label" for="terms">
                                     I agree to the <a href="#" class="text-decoration-none">Terms and Conditions</a>
                                 </label>
+                                @error('terms')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
 
