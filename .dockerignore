@@ -1,0 +1,58 @@
+# Version control
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+README.md
+CHANGELOG.md
+*.md
+
+# Docker files
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Development tools
+.editorconfig
+.phpunit.result.cache
+phpunit.xml
+
+# IDE files
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node.js
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Laravel specific
+.env.example
+.env.testing
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/testing/*
+storage/framework/views/*
+bootstrap/cache/*
+
+# Vendor (will be installed during build)
+vendor
+
+# Build artifacts
+public/build
+public/hot
+
+# Test files
+tests
+.phpunit.cache
+
+# Deployment
+deploy.php
